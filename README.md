@@ -1,21 +1,25 @@
-# OpenAI Q&A GUI Tool
+# OpenAI Q&A Web Application
 
 ## Overview
 
-This application provides a graphical user interface (GUI) for interacting with OpenAI's chat completion models. Users can input their API credentials and question, configure model parameters, and receive answers directly within the tool.
+This application provides a web-based interface, powered by Streamlit, for interacting with OpenAI's chat completion models. Users can input their API credentials, configure model parameters, ask questions, and receive answers directly within the web application.
 
 ## Features
 
-*   GUI for interacting with OpenAI's chat models.
-*   User-configurable API parameters:
-    *   API Key (securely masked in the input field)
-    *   Base URL (defaults to `https://api.openai.com/v1`)
-    *   Model Name (defaults to `gpt-3.5-turbo`)
-*   Adjustable settings for Temperature and Max Response Length.
-*   Displays AI's answers in a dedicated text area.
-*   Provides status messages for ongoing operations, errors, and success.
-*   Basic input validation for Temperature and Max Response Length.
-*   API calls are made in a separate thread to keep the GUI responsive.
+*   Web interface powered by Streamlit for interacting with OpenAI's chat models.
+*   User-configurable API parameters located in the sidebar:
+    *   **API Key**: Securely entered (input is masked).
+    *   **Base URL**: Defaults to `https://api.openai.com/v1`.
+    *   **Model Name**: Defaults to `gpt-3.5-turbo`.
+*   Adjustable settings via interactive sliders in the sidebar:
+    *   **Temperature**: Controls randomness (0.0 to 2.0).
+    *   **Max Reply Length**: Sets maximum tokens for the response (50 to 8192).
+*   Configuration Persistence: API Key, Base URL, and Model Name can be saved using the "Save Configuration" button in the sidebar. These are stored locally in a `config.json` file (base64 encoded).
+*   Chat history is displayed in the main panel.
+*   User input is provided via a chat input box at the bottom of the main panel.
+*   Displays AI's responses in the chat history.
+*   Provides error messages within the interface for issues like missing API keys or API call failures.
+*   Input validation for Temperature and Max Reply Length is handled by the Streamlit sliders' range.
 
 ## Prerequisites
 
@@ -50,7 +54,7 @@ This application provides a graphical user interface (GUI) for interacting with 
             ```
 
 3.  **Install dependencies:**
-    Install the required Python packages using `pip`:
+    Install the required Python packages using `pip`. The `requirements.txt` file includes `streamlit` and `openai`.
     ```bash
     pip install -r requirements.txt
     ```
@@ -60,28 +64,30 @@ This application provides a graphical user interface (GUI) for interacting with 
 Once the setup is complete and the virtual environment is activated, run the application using:
 
 ```bash
-python app.py
+streamlit run app.py
 ```
 
-This will launch the GUI window.
+This will launch the web application in your default web browser.
 
 ## How to Use
 
-The GUI provides several fields to configure your API request:
+The application interface is divided into a sidebar for configuration and a main panel for chat interaction.
 
-*   **API Key**: Enter your OpenAI API key here. The input is masked for security.
-*   **Base URL**: The base URL for the OpenAI API. It defaults to `https://api.openai.com/v1`. You generally don't need to change this unless you are using a proxy or a different API endpoint.
-*   **Model Name**: Specify the model you want to use for generation (e.g., `gpt-3.5-turbo`, `gpt-4`, `gpt-4-turbo`). It defaults to `gpt-3.5-turbo`.
-*   **Temperature**: This setting controls the randomness of the output. It accepts values between 0.0 and 2.0. Lower values (e.g., 0.2) make the output more deterministic and focused, while higher values (e.g., 0.8) make it more random and creative. The default is 0.7.
-*   **Max Response Length**: This sets the maximum number of tokens (words and parts of words) that the AI will generate in its response. The default is 150 tokens. The valid range is between 1 and 8192.
-*   **Your Question**: Type the question or prompt you want to send to the AI in this text area.
+**Configuration (Sidebar):**
+All configuration options are located in the sidebar:
 
-**Submitting a Question:**
-After filling in the fields, click the "Submit" button.
+*   **API Key**: Enter your OpenAI API key here. The input is masked.
+*   **Base URL**: The base URL for the OpenAI API. It defaults to `https://api.openai.com/v1`.
+*   **Model Name**: Specify the model you want to use (e.g., `gpt-3.5-turbo`, `gpt-4`). Defaults to `gpt-3.5-turbo`.
+*   **Temperature**: Adjust the slider to control the randomness of the output (0.0-2.0). Default is 0.7.
+*   **Max Reply Length**: Adjust the slider to set the maximum number of tokens for the AI's response. Default is 150.
+*   **Save Configuration**: Click this button to save the current API Key, Base URL, and Model Name to a local `config.json` file for future sessions. Temperature and Max Reply Length are not saved and will reset to their defaults.
 
-**Getting Results:**
-*   The AI's answer will appear in the "AI's Answer" text area.
-*   The status bar at the bottom of the window will display messages like "Submitting...", "Done.", or any error messages encountered during the process.
+**Chatting (Main Panel):**
+
+*   **Entering a Question**: Type your question or prompt into the chat input box located at the bottom of the main panel and press Enter or click the send icon.
+*   **Viewing Chat History**: Your messages and the AI's responses will appear sequentially in the main panel, creating a conversation history.
+*   **Error Messages**: If there are issues (e.g., missing API key, API errors), error messages will be displayed within the chat interface or sidebar.
 
 ## Running Tests
 
@@ -93,10 +99,11 @@ python -m unittest test_openai_client.py
 
 ## Files
 
-*   `app.py`: The main application file. It contains the Tkinter GUI code, event handling, and logic for interacting with the user and the `openai_client`.
-*   `openai_client.py`: This module contains the `get_openai_response` function, which is responsible for making requests to the OpenAI API and handling potential errors.
+*   `app.py`: The main application file, built with Streamlit, containing the UI and logic for the chat interface and configuration sidebar.
+*   `openai_client.py`: This module contains the `get_openai_response` function, responsible for making requests to the OpenAI API and handling potential errors.
 *   `test_openai_client.py`: Contains unit tests for the `get_openai_response` function in `openai_client.py`.
-*   `requirements.txt`: Lists the Python dependencies required for the project (currently, just `openai`).
+*   `requirements.txt`: Lists Python dependencies (`openai`, `streamlit`).
+*   `config.json`: Stores the saved API Key, Base URL, and Model Name (base64 encoded). Automatically created when "Save Configuration" is used.
 
 ---
-This README provides a comprehensive guide for users and developers of the OpenAI Q&A GUI Tool.
+This README provides a comprehensive guide for users and developers of the OpenAI Q&A Web Application.
